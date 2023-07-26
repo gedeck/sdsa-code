@@ -94,3 +94,17 @@ above_threshold = np.sum(differences.round(2) >= 0.92)
 p_value = above_threshold / len(differences)
 print(f"p-value: {p_value:.4f}")
 print(f"Number of permuations greater or equal 0.92: {above_threshold}")
+
+## The normal distribution
+
+from scipy import stats
+x = np.linspace(-4.5, 4.5, 1000)
+y = stats.norm.pdf(x, 0, 1)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.axhline(0, color="grey")
+ax.axvline(0, color="grey")
+ax.plot(x, y, linewidth=2)
+ax.set_xlabel("Standard deviations")
+ax.set_ylabel("")
+ax.set_xlim(-4.5, 4.5)
+plt.show()

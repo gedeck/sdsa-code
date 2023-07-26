@@ -216,3 +216,26 @@ print(f'{sum(count > 7 for count in counts) / len(counts):.3f}')
 print(f'{freq_table[7:].sum() / freq_table.sum():.3f}')
 
 # d.
+# Create several families with 10 children and determine the number of families with three or fewer girls
+
+import random
+random.seed(1234)  # set random seed for reproducibility
+nrepeats = 1000
+nchildren = 10
+
+# create families with 10 children using resampling
+nfamilies = 0
+for _ in range(nrepeats):
+    family = random.choices(['M', 'F'], k=10)  # sample with replacement
+    number_of_girls = family.count('F')
+    if number_of_girls <= 3:  # count the families with 3 or fewer girls
+        nfamilies += 1
+percentage = nfamilies / nrepeats
+
+print(f'Percentage of families with three or fewer girls: {percentage:.2%}%')
+
+# As an alternative, we can use the binomial distribution to calculate the probability.
+
+from scipy.stats import binom
+
+print(f'Percentage of families with three or fewer girls: {binom.cdf(3, 10, 0.5):.2%}%')
