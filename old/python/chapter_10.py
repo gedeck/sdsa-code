@@ -68,7 +68,6 @@ plt.show()
 ci_interval = stats.t.interval(0.9, 11, loc=vendorA.mean(), scale=vendorA.std(ddof=1)/np.sqrt(12))
 np.array(ci_interval).round(2)
 
-## Example: Marriage therapy
 
 observed = pd.DataFrame({
     "B": {1: 15, 2: 3, 3: 11},
@@ -80,58 +79,6 @@ _, _, _, expected = stats.chi2_contingency(observed)
 print(expected)
 # calculate sum of absolute differences
 np.abs(observed - expected).sum().sum()
-
-# Resampling procedure
-
-from collections import Counter
-random.seed(123)
-box = [1] * 39 + [2] * 8 + [3] * 12
-statistics = []
-for _ in range(10_000):
-    random.shuffle(box)
-    resample_B = box[:29]
-    resample_I = box[29:]
-    counts_B = Counter(resample_B)
-    counts_I = Counter(resample_I)
-    table = pd.DataFrame({
-        "B": {i: counts_B[i] for i in [1, 2, 3]},
-        "I": {i: counts_I[i] for i in [1, 2, 3]},
-    }).transpose()
-    statistic = np.abs(table - expected).sum().sum()
-    statistics.append(statistic)
-
-statistics = np.array(sorted(statistics, reverse=True))
-count_above = sum(statistics > 20.42)
-p_value = count_above / len(statistics)
-
-print(f"observed: {np.abs(observed - expected).sum().sum():.2f}")
-print(f"count above: {count_above}")
-print(f"p-value: {p_value:.4f}")
-
-
-random.seed(123)
-box = [1] * 39 + [2] * 8 + [3] * 12
-random.shuffle(box)
-resample_B = box[:29]
-resample_I = box[29:]
-counts_B = Counter(resample_B)
-counts_I = Counter(resample_I)
-table = pd.DataFrame({
-    "B": {i: counts_B[i] for i in [1, 2, 3]},
-    "I": {i: counts_I[i] for i in [1, 2, 3]},
-}).transpose()
-print("Shuffeld box")
-print(" & ".join([str(i) for i in box]))
-print(table)
-print(expected)
-print(np.abs(table - expected))
-print(np.abs(table - expected).sum().sum())
-
-# Show a values in the vicinity of the observed value
-
-at_threshold = np.where(statistics <= 20.42)[0][0]
-for i in range(-5, 5):
-    print(f"{at_threshold + i + 1} : {statistics[at_threshold + i]:.3f}")
 
 ## Chi Square Example
 

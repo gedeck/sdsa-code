@@ -51,11 +51,11 @@ print(rng.choice([0, 1, 2, 3, 4], size=3, replace=False)) # [2 1 0]
 
 from scipy.stats import norm
 rng = np.random.default_rng(seed=123) # create a RNG with a fixed seed for reproducibility
-print(norm.rvs(loc=0.0, scale=1.0, size=3, random_state=rng)) 
+print(norm.rvs(loc=0.0, scale=1.0, size=3, random_state=rng))
 # [-0.98912135 -0.36778665  1.28792526]
-print(norm.pdf(x=0.0, loc=0.0, scale=1.0)) 
+print(norm.pdf(x=0.0, loc=0.0, scale=1.0))
 # 0.3989422804014327
-print(norm.cdf(x=0.0, loc=0.0, scale=1.0)) 
+print(norm.cdf(x=0.0, loc=0.0, scale=1.0))
 # 0.5
 
 ### Using random numbers in other packages
@@ -74,7 +74,7 @@ mean_reduction = df[['Treatment', 'Reduction']].groupby("Treatment").mean()
 print(mean_reduction)
 
 
-observed_difference = (mean_reduction.loc[1, 'Reduction'] - 
+observed_difference = (mean_reduction.loc[1, 'Reduction'] -
                        mean_reduction.loc[0, 'Reduction'])
 print(f'Observed reduction {observed_difference:.3f}')
 
@@ -84,8 +84,8 @@ treatment = df['Treatment']
 
 
 import random
-random.seed(123)  # set the seed to ensure a different outcome
-shuffled = list(observation) # create a copy of the list
+random.seed(123)
+shuffled = list(observation)
 random.shuffle(shuffled)
 
 # split the shuffled observations by treatment group
@@ -115,8 +115,8 @@ obs_treatment_0 = np.mean(observed_0)
 obs_treatment_1 = np.mean(observed_1)
 
 
-shuffled = observation.copy() # create a copy of the observations
-random.shuffle(shuffled)  # shuffle the copy
+shuffled = observation.copy()
+random.shuffle(shuffled)
 means = shuffled.groupby(treatment).mean()
 means[1] - means[0]
 
@@ -133,8 +133,10 @@ print(f"Minimum difference {np.min(differences):.2f}")
 print(f"Maximum difference {np.max(differences):.2f}")
 
 
+
 ax = pd.Series(differences).plot.hist(bins=25)
 ax.axvline(x=observed_difference, color='grey')
+plt.show()
 
 
 nr_greater_observed = sum(d >= observed_difference for d in differences)
@@ -160,3 +162,133 @@ differences = resampling_difference_means(df['Reduction'], df['Treatment'], nr_t
 print(f"Mean difference after reshuffling {np.mean(differences):.2f}")
 print(f"Minimum difference {np.min(differences):.2f}")
 print(f"Maximum difference {np.max(differences):.2f}")
+
+
+import random
+count = 0
+for _ in range(100):
+    if random.randint(1, 6) == 6:
+        count += 1
+print(f'Count : {count} ({count/100:.1%})')
+
+
+import random
+count = 0
+for _ in range(100):
+    if random.randint(1, 6) + random.randint(1, 6) == 7:
+        count += 1
+print(f'Count : {count} ({count/100:.1%})')
+
+
+import random
+from collections import defaultdict
+counts = defaultdict(int)
+for _ in range(1000):
+    count = 0
+    for _ in range(100):
+        if random.randint(1, 6) + random.randint(1, 6) == 7:
+            count += 1
+    counts[count] += 1
+df = pd.DataFrame({'number': number, 'count': count} for number, count in sorted(counts.items()))
+df.plot.bar(x='number', y='count', legend=False)
+
+
+import random
+import numpy as np
+random.seed(123)  # set the seed to ensure a different outcome
+nr_trials = 10_000
+nr_heads = 0
+runs = [0] * nr_trials
+previous = random.choice(['H', 'T'])
+run = 1
+max_run = 0
+for _ in range(nr_trials):
+    current = random.choice(['H', 'T'])
+    if current == previous:
+        run += 1
+    else:
+        runs[run] += 1
+        max_run = max(max_run, run)
+        run = 1
+print(np.array(runs[1:max_run + 1]) / nr_trials)
+
+
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.bar(range(1, max_run + 1), runs[1:max_run + 1])
+ax.set_xlabel("Run length")
+ax.set_ylabel("Frequency")
+ax.set_title("Distribution of run lengths")
+
+
+import random
+import numpy as np
+import pandas as pd
+random.seed(123)  # set the seed to ensure a different outcome
+
+import numpy as np
+rng = np.random.default_rng(seed=321)
+
+nr_trials = 10_000
+two_with_same_birthdays = [0] * 365
+for _ in range(nr_trials):
+    # create random birthdays until we see one for the second time
+    seen = set()
+    while True:
+        birthday = random.randint(1, 365)
+        if birthday in seen:
+            break
+        seen.add(birthday)
+    # store the number of birthdays we had to generate (+1 for the last one)
+    nr_birthdays = len(seen) + 1
+    two_with_same_birthdays[nr_birthdays] += 1
+
+
+probabilities = np.array(two_with_same_birthdays) / nr_trials
+df = pd.DataFrame({
+    'Group size': range(1, 366),
+    'Frequency': two_with_same_birthdays,
+    'Probability': probabilities,
+    'Cumulative probability': probabilities.cumsum(),
+})
+
+
+ax = df.plot(x='Group size', y='Probability')
+df.plot(x='Group size', y='Cumulative probability', ax=ax)
+ax.axhline(y=0.5, color='grey')
+ax.axhline(y=0.99, color='grey')
+
+
+print('Size of group so that the chance is greater 50%')
+print(df[df['Cumulative probability'] >= 0.5].iloc[0])
+print('Size of group so that the chance is greater 99%')
+print(df[df['Cumulative probability'] >= 0.99].iloc[0])
+
+
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+random.seed(123)  # set the seed to ensure a different outcome
+nr_trials = 100_000
+approximations = {nr_points: [] for nr_points in range(10_000, nr_trials + 1, 10_000)}
+approximations = []
+for nrepeat in range(20):
+    nr_points_in_circle = 0
+    for nr_points in range(1, nr_trials + 1):
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        if x**2 + y**2 <= 1:
+            nr_points_in_circle += 1
+        if nr_points % 10_000 == 0:
+            approximations.append({
+                'repeat': nrepeat,
+                'nr_points': nr_points,
+                'approximation': 4 * nr_points_in_circle / nr_points,
+            })
+approximations = pd.DataFrame(approximations)
+
+
+df = approximations.groupby('nr_points').agg({'approximation': ['mean', 'std']}).reset_index()
+df.columns = ['nr_points', 'mean', 'std']
+ax = df.plot(x='nr_points', y='mean', yerr='std', capsize=4)
+ax.axhline(y=np.pi, color='grey')

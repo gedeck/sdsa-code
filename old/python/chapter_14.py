@@ -62,6 +62,7 @@ housing.plot.scatter(x="predicted", y="residual", ax=ax)
 ax.set_xlabel("Predicted value")
 ax.set_ylabel("Residuals")
 plt.show()
+housing.to_csv("boston-housing-model.csv")
 
 # QQ-plot for residuals
 

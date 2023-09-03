@@ -6,19 +6,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-## Example: College admissions data
-# Load and preprocess the data
 
 df = pd.read_csv("berkeley.csv")
 df = df[df["Major"] != "Other"]
-
-# Create a 2 x 2 table
-
-pd.crosstab(df["Admission"], df["Gender"], margins=True)
-
-# Percent by column
-
-(pd.crosstab(df["Admission"], df["Gender"], margins=True, normalize="columns") * 100).round(2)
 
 # All applicants for department A
 
@@ -81,39 +71,3 @@ data.head()
 
 ct = pd.crosstab(data["Smokes?"], data["Sex"], margins=True, normalize="columns")
 100 * ct.round(4)
-
-## Example: College admissions data (continued)
-# Load, process the data, and create a 2x2 table
-
-df = pd.read_csv("berkeley.csv")
-df = df[df["Major"] != "Other"]
-admission_gender = pd.crosstab(df["Gender"], df["Major"], margins=True)
-admission_gender
-
-# Percentage of total applications by department and gender
-
-100 * pd.crosstab(df["Gender"], df["Major"], margins=True, normalize="all").round(4)
-
-# Percentage of department applications by gender
-
-100 * pd.crosstab(df["Gender"], df["Major"], margins=True, normalize="columns").round(4)
-
-# Male/female applications by department
-
-100 * pd.crosstab(df["Gender"], df["Major"], margins=True, normalize="index").round(4)
-
-## Independence
-# Admission rates by department
-
-100 * pd.crosstab(df["Admission"], df["Major"], margins=True, normalize="columns").round(4)
-
-## Simpson's Paradox
-# Berkeley admission rates
-
-100 * pd.crosstab(df["Admission"], df["Gender"], margins=True, normalize="columns").round(4)
-
-# Berkeley admission rates by department
-
-admitted = df[df["Admission"] == "Accepted"]
-(pd.crosstab(admitted["Gender"], admitted["Major"]) /
-pd.crosstab(df["Gender"], df["Major"]))
