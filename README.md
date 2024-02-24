@@ -12,9 +12,13 @@
 </tr>
 </table>
 
+## Code repository for "Statistics for Data Science and Analytics"
+
+- <a href="datasets.zip">datasets.zip</a>: contains all datafiles used in the book
+- <a href="notebooks.zip">notebooks.zip</a>: Jupyter notebooks with code from chapters and the Python sections of each chapter
+- <a href="python.zip">python.zip</a>: raw Python files
 
 
-# Code repository for "Statistics for Data Science and Analytics"
 
-## Running the code in this repository
-The Python code expects the dataset files in the same directory. You will need to copy them from the `datasets` directory to 
+## Installation instructions
+Instructions on installing Python are <a href="doc/installPython.md">here</a>.
