@@ -1,6 +1,6 @@
 <table>
 <tr>
-<td><img src="img/sdsa-cover.png" width=300></td>
+<td><img src="img/sdsa-cover.png" width=275></td>
 <td>
     <h3>Statistics for Data Science and Analytics</h3>
     <p>by Peter C. Bruce, <a href="https://www.amazon.com/Peter-Gedeck/e/B082BJZJKX/">Peter Gedeck</a>, Janet Dobbins</p>
@@ -10,7 +10,7 @@
     </ul>
 </td>
 </tr>
-
+</table>
 
 
 
